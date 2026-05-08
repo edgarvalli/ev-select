@@ -1,5 +1,5 @@
 {
-  "name": "ev-select",
+  "name": "@edgarvalli/ev-select",
   "version": "1.0.0",
   "description": "Reusable React select component",
   "author": "Tu Nombre",
