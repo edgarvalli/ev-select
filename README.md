@@ -1,73 +1,309 @@
-# React + TypeScript + Vite
+# EV Select
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A reusable, lightweight and customizable select/autocomplete component for React with TypeScript support.
 
-Currently, two official plugins are available:
+Built with:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- TypeScript
+- Vite
 
-## React Compiler
+Features:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Keyboard navigation
+- Async search support
+- Internal filtering
+- Generic typing
+- Custom item rendering
+- Debounced search
+- Lightweight CSS
+- No external UI dependencies
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install ev-select
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+or
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+yarn add ev-select
 ```
+
+---
+
+# Basic Usage
+
+```tsx
+import { useState } from "react";
+import { EVSelect } from "ev-select";
+
+export default function App() {
+  const [fruits] = useState([
+    { id: 1, name: "Apple" },
+    { id: 2, name: "Banana" },
+    { id: 3, name: "Orange" },
+  ]);
+
+  return (
+    <EVSelect<{ id: number; name: string }>
+      options={fruits}
+      keyExtractor={(item) => String(item.id)}
+      keyName="name"
+      fieldsToSearch={["name"]}
+      label="Select Fruit"
+      onChange={(item) => console.log(item)}
+    />
+  );
+}
+```
+
+---
+
+# Async Search Example
+
+Use `onSearch` to perform backend/API requests.
+
+```tsx
+import { useState } from "react";
+import { EVSelect } from "ev-select";
+
+interface User {
+  id: number;
+  name: string;
+}
+
+export default function App() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchUsers = async (search: string) => {
+    setLoading(true);
+
+    const response = await fetch(`/api/users?search=${search}`);
+
+    const data = await response.json();
+
+    setUsers(data);
+
+    setLoading(false);
+  };
+
+  return (
+    <EVSelect<User>
+      options={users}
+      keyExtractor={(item) => String(item.id)}
+      keyName="name"
+      fieldsToSearch={["name"]}
+      label="Search Users"
+      onSearch={fetchUsers}
+      loading={loading}
+      disableInternalFilter
+    />
+  );
+}
+```
+
+---
+
+# Custom Render
+
+```tsx
+<EVSelect<User>
+  options={users}
+  keyExtractor={(item) => String(item.id)}
+  keyName="name"
+  onRenderItem={(user) => (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <span>{user.name}</span>
+      <small>#{user.id}</small>
+    </div>
+  )}
+/>
+```
+
+---
+
+# Props
+
+| Prop                    | Type                      | Description                        |
+| ----------------------- | ------------------------- | ---------------------------------- |
+| `options`               | `T[]`                     | Options list                       |
+| `keyExtractor`          | `(item: T) => string`     | Unique key generator               |
+| `keyName`               | `keyof T`                 | Field used for display             |
+| `fieldsToSearch`        | `(keyof T)[]`             | Fields used for internal filtering |
+| `label`                 | `string`                  | Input label                        |
+| `delay`                 | `number`                  | Debounce delay in ms               |
+| `onChange`              | `(item: T) => void`       | Triggered when item is selected    |
+| `onSearch`              | `(value: string) => void` | Triggered after debounce           |
+| `onFocus`               | `() => void`              | Input focus event                  |
+| `onBlur`                | `() => void`              | Input blur event                   |
+| `onRenderItem`          | `(item: T) => ReactNode`  | Custom option renderer             |
+| `loading`               | `boolean`                 | Displays loader                    |
+| `disableInternalFilter` | `boolean`                 | Disables internal filtering        |
+
+---
+
+# Keyboard Navigation
+
+Supported keys:
+
+| Key         | Action                    |
+| ----------- | ------------------------- |
+| `ArrowDown` | Navigate down             |
+| `ArrowUp`   | Navigate up               |
+| `Enter`     | Select highlighted option |
+| `Escape`    | Close dropdown            |
+
+---
+
+# Internal Filtering
+
+By default, the component filters options internally.
+
+```tsx
+<EVSelect options={data} fieldsToSearch={["name"]} />
+```
+
+---
+
+# Disable Internal Filtering
+
+Useful for async/server-side search.
+
+```tsx
+<EVSelect options={data} disableInternalFilter onSearch={fetchData} />
+```
+
+---
+
+# TypeScript Support
+
+Fully typed using generics.
+
+```tsx
+interface Product {
+  id: number;
+  name: string;
+  category: string;
+}
+
+<EVSelect<Product>
+  options={products}
+  keyExtractor={(item) => String(item.id)}
+  keyName="name"
+/>;
+```
+
+---
+
+# Styling
+
+The component includes built-in CSS styles.
+
+No additional setup is required.
+
+---
+
+# CSS Variables
+
+You can customize styles using CSS variables.
+
+```css
+.ev-select {
+  --ev-border-color: #3b82f6;
+  --ev-border-radius: 12px;
+  --ev-bg: #ffffff;
+  --ev-text: #111827;
+  --ev-hover: #eff6ff;
+}
+```
+
+---
+
+# Accessibility
+
+Features:
+
+- Keyboard navigation
+- Focus states
+- Accessible interactions
+- Input-based navigation
+
+---
+
+# Package Structure
+
+```txt
+src/
+  components/
+  styles/
+  index.ts
+```
+
+---
+
+# Build
+
+```bash
+npm run build
+```
+
+---
+
+# Development
+
+```bash
+npm run dev
+```
+
+---
+
+# Peer Dependencies
+
+```json
+{
+  "react": "^18 || ^19",
+  "react-dom": "^18 || ^19"
+}
+```
+
+---
+
+# Recommended Improvements
+
+Future roadmap:
+
+- Virtualized list
+- Multi-select
+- Grouped options
+- Accessibility improvements
+- Controlled mode
+- Mobile optimizations
+- Custom dropdown positioning
+
+---
+
+# License
+
+MIT
+
+---
+
+# Author
+
+Your Name
+
+---
+
+# Repository
+
+GitHub Repository URL
