@@ -6,10 +6,13 @@ export function EVControl<T>(props: EVControlProps<T>) {
 
   return (
     <div className="ev-select__control">
-      <label htmlFor={id} className="ev-select__label">
+      <label
+        htmlFor={id}
+        className={`ev-select__label ${props.labelClassName}`}
+      >
         {props.label}
       </label>
-      <div className="ev-select__input-wrapper">
+      <div className={`ev-select__input-wrapper ${props.className}`}>
         <input
           id={id}
           value={props.value}

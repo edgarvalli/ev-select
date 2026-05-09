@@ -13,6 +13,8 @@ export interface EVSelectProps<T = Record<string, any>> {
   label?: string;
   onSearch?: (value: string) => void;
   disableInternalFilter?: boolean;
+  className?: string;
+  labelClassName?: string;
 }
 
 export interface EVControlProps<T> {
@@ -21,6 +23,8 @@ export interface EVControlProps<T> {
   value?: string;
   label?: string;
   isDebouncing?: boolean;
+  className?: string;
+  labelClassName?: string;
   controlRef?: RefObject<HTMLInputElement | null>;
   onFocus?: () => void;
   onBlur?: () => void;
