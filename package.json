@@ -1,26 +1,14 @@
 {
   "name": "@edgarvalli/ev-select",
-  "version": "1.0.0",
-  "description": "Reusable React select component",
-  "author": "Tu Nombre",
-  "license": "MIT",
-  "main": "./dist/index.umd.js",
+  "version": "1.0.3",
+  "type": "module",
+  "main": "./dist/index.es.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "sideEffects": [
-    "*.css"
-  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
-  },
-  "peerDependencies": {
-    "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.0",
@@ -31,8 +19,19 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
-    }
+      "import": "./dist/index.es.js"
+    },
+    "./style.css": "./dist/ev-select.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
   }
 }

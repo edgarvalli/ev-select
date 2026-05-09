@@ -8,20 +8,18 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
+      entryRoot: "src",
     }),
   ],
-
   build: {
+    copyPublicDir: false,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "EVSelect",
-      fileName: (format) => `index.${format}.js`,
-      formats: ["es", "umd"],
+      formats: ["es"],
+      fileName: () => "index.es.js",
     },
-
     rollupOptions: {
       external: ["react", "react-dom"],
-
       output: {
         globals: {
           react: "React",
@@ -29,8 +27,5 @@ export default defineConfig({
         },
       },
     },
-
-    sourcemap: true,
-    emptyOutDir: true,
   },
 });

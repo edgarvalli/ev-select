@@ -1,5 +1,9 @@
 import "./styles/ev-select.css";
 
-export { default as EVSelect } from "./components/ev-select";
+export { EVSelect } from "./components/ev-select";
 
-export type { EVSelectProps } from "./components/types";
+export type {
+  EVControlProps,
+  EVSelectProps,
+  EVListOptionsProps,
+} from "./components/types";

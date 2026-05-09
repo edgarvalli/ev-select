@@ -1,12 +1,4 @@
-import type {
-  ChangeEvent,
-  DetailedHTMLProps,
-  Dispatch,
-  InputHTMLAttributes,
-  ReactNode,
-  RefObject,
-  SetStateAction,
-} from "react";
+import type { ChangeEvent, KeyboardEvent, ReactNode, RefObject } from "react";
 
 export interface EVSelectProps<T = Record<string, any>> {
   options: T[];
@@ -39,6 +31,6 @@ export interface EVControlProps<T> {
 export interface EVListOptionsProps<T> extends EVSelectProps<T> {
   onItemSelect?: (item: T) => void;
   open?: boolean;
-  listRef?: RefObject;
+  listRef?: RefObject<HTMLUListElement | null>;
   highlightedIndex?: number;
 }

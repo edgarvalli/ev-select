@@ -3,7 +3,7 @@ import type { EVSelectProps } from "./types";
 import { EVControl } from "./ev-control";
 import { EVListOptions } from "./ev-list-options";
 
-export default function EvSelect<T>(props: EVSelectProps<T>) {
+export function EVSelect<T>(props: EVSelectProps<T>) {
   const [value, setValue] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [isDebouncing, setIsDebouncing] = useState(false);
